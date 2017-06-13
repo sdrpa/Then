@@ -91,3 +91,14 @@ public class Promise<T>: AsyncType {
         initialPromiseStart = nil
     }
 }
+
+extension Promise where T == Void {
+    internal func resolvePromise() {
+        state = .fulfilled(value:())
+        for sb in blocks.success {
+            sb(())
+        }
+        blocks.finally()
+        initialPromiseStart = nil
+    }
+}
